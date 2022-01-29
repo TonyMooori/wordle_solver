@@ -34,16 +34,22 @@ def wordle_result(true_answer: str, estimated_word: str) -> int:
     :return: n_letter digit ternary number(0: same, 1: exists, 2: not exists)) 
     :rtype: int
     """
-    multiplier = 1
     result = 0
+    true_answer_chars: List[str] = list(true_answer)
     for i, c in enumerate(estimated_word):
-        if true_answer[i] == c:
+        if true_answer_chars[i] == c:
+            true_answer_chars[i] = "*"
+
+    multiplier = 1
+    for i, c in enumerate(estimated_word):
+        if true_answer_chars[i] == "*":
             result += 0 * multiplier
-        elif c in true_answer:
+        elif c in true_answer_chars:
             result += 1 * multiplier
         else:
             result += 2 * multiplier
         multiplier *= 3
+
     return result
 
 
@@ -115,7 +121,7 @@ def main():
     n_letter = 5
     # https://github.com/dwyl/english-words
     whole_words = load_words("./secret/whole_words.txt", n_letter)
-    # whole_words = load_words("candidate_words.txt", n_letter)
+    whole_words = load_words("./secret/candidate_words.txt", n_letter)
     candidate_words = load_words("./secret/candidate_words.txt", n_letter)
 
     # input answer
